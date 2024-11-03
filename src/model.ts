@@ -75,10 +75,44 @@ const deleteBook = (id: number) => {
   }
 };
 
-console.log(getBooks());
-console.log("--");
-console.log(getBook(1));
-console.log(deleteBook(5));
+const getUsers = () => {
+  try {
+    const query = db.query("select * from users");
+    return query.all();
+  } catch (error) {
+    console.log("err", error);
+  }
+};
+
+const createUser = (user: any) => {
+  try {
+    const query = db.query(
+      `insert into users (username,email, password) values ($username, $email, $password)`
+    );
+    query.run({
+      $username: user.username,
+      $email: user.email,
+      $password: user.password,
+    });
+  } catch (error) {
+    console.log("err", error);
+  }
+};
+
+const getUserByUsername = (username: string) => {
+  try {
+    const query = db.query(`select * from users where username = $username `);
+    return query.get({ $username: username });
+  } catch (error) {
+    console.log("err", error);
+    return null;
+  }
+};
+
+// console.log(getBooks());
+// console.log("--");
+// console.log(getBook(1));
+// console.log(deleteBook(5));
 // console.log(
 //   createBook({
 //     title: "The Catcher in the Rye",
@@ -91,4 +125,24 @@ console.log(deleteBook(5));
 //   })
 // );
 
+console.log(getUsers());
+
+// console.log(
+//   createUser({
+//     username: "algnot",
+//     email: "algnot@example.com",
+//     password: "password123",
+//   })
+// );
+
 // console.log(query.get());
+
+export {
+  getUsers,
+  createBook,
+  getBook,
+  getBooks,
+  deleteBook,
+  updatedBook,
+  getUserByUsername,
+};
